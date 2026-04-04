@@ -132,7 +132,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 p-6 md:p-10 text-slate-800 dark:text-slate-100 transition-colors duration-500">
+    <div className="min-h-screen bg-gradient-to-br from-sky-100/80 via-blue-50 to-teal-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 p-6 md:p-10 text-slate-800 dark:text-slate-100 transition-colors duration-500">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <h1 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm tracking-tight pt-2 pb-2">
