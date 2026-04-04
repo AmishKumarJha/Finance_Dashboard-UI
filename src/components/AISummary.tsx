@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Transaction {
   id: number;
@@ -15,6 +15,11 @@ interface Props {
 const AISummary = ({ transactions }: Props) => {
   const [summary, setSummary] = useState<string>("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Auto-reset the generated summary when the user switches months or modifies data
+    setSummary("");
+  }, [transactions]);
 
   const generateSummary = () => {
     setLoading(true);
