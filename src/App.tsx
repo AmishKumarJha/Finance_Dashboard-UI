@@ -58,6 +58,20 @@ function App() {
         category: "Food",
         type: "expense",
       },
+      {
+        id: 3,
+        date: "2026-04-03",
+        amount: 500,
+        category: "Electricity Bill",
+        type: "expense",
+      },
+      {
+        id: 4,
+        date: "2026-04-04",
+        amount: 150,
+        category: "Mobile Recharge",
+        type: "expense",
+      },
     ];
   });
 
@@ -82,7 +96,12 @@ function App() {
     return Array.from(months).sort().reverse();
   }, [transactions]);
 
-  const [selectedMonth, setSelectedMonth] = useState<string>("all");
+  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    return `${year}-${month}`;
+  });
 
   const filteredTransactions = useMemo(() => {
     if (selectedMonth === "all") return transactions;
