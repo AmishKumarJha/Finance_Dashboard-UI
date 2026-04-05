@@ -1,10 +1,10 @@
-# Finance Dashboard 💸
+# Finance Dashboard 
 
 A fully interactive, deeply personalized personal finance dashboard for tracking income and expenses. This project focuses intensely on delivering a premium, smooth user experience through modern visually-stunning design choices (glassmorphism) while supporting robust architectural patterns strictly utilizing built-in React methodologies.
 
 ---
 
-## 🚀 Overview of Approach
+## Overview of Approach
 
 The goal of this dashboard was to decouple complex View logic from Business layer state logic, ensuring components are snappy, reusable, and predictable.
 
@@ -17,7 +17,7 @@ Instead of immediately reaching for an external, heavy dependency like Redux or 
 
 ---
 
-## ✨ Features
+##  Features
 
 - **Premium UI & Glassmorphism Design:** Vibrant light and dark modes utilizing transparent frosted glass cards, dynamic micro-animations on hover interactions, and responsive grid layouts driven by `TailwindCSS v3`.
 - **Intelligent Global Month Filtering:** Users easily scrub back dynamically generated unique timestamps representing active months tracking their spending. Changing the timeline automatically refilters the entire board's charts, math aggregations, and insights.
