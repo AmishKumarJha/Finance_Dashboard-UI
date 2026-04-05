@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useFinance } from "../context/FinanceContext";
-import type { Transaction } from "../context/FinanceContext";
 
 const AddTransaction = () => {
   const { addTransaction: onAdd } = useFinance();
