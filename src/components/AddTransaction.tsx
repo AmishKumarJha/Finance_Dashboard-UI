@@ -1,10 +1,9 @@
 import { useState } from "react";
+import { useFinance } from "../context/FinanceContext";
+import type { Transaction } from "../context/FinanceContext";
 
-interface Props {
-  onAdd: (transaction: any) => void;
-}
-
-const AddTransaction = ({ onAdd }: Props) => {
+const AddTransaction = () => {
+  const { addTransaction: onAdd } = useFinance();
   const [form, setForm] = useState({
     date: "",
     amount: "",
@@ -18,9 +17,11 @@ const AddTransaction = ({ onAdd }: Props) => {
     if (!form.date || !form.amount || !form.category) return;
 
     onAdd({
-      ...form,
-      amount: Number(form.amount),
       id: Date.now(),
+      date: form.date,
+      amount: parseFloat(form.amount || "0"),
+      category: form.category,
+      type: form.type as "expense" | "income",
     });
 
     setForm({ date: "", amount: "", category: "", type: "expense" });

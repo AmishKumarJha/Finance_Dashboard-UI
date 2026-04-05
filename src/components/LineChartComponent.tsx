@@ -7,20 +7,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useFinance } from "../context/FinanceContext";
 
-interface Transaction {
-  id: number;
-  date: string;
-  amount: number;
-  category: string;
-  type: "income" | "expense";
-}
-
-interface Props {
-  transactions: Transaction[];
-}
-
-const LineChartComponent = ({ transactions }: Props) => {
+const LineChartComponent = () => {
+  const { filteredTransactions: transactions } = useFinance();
   const data = useMemo(() => {
     const sorted = [...transactions].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()

@@ -1,18 +1,8 @@
 import { useMemo } from "react";
+import { useFinance } from "../context/FinanceContext";
 
-interface Transaction {
-  id: number;
-  date: string;
-  amount: number;
-  category: string;
-  type: "income" | "expense";
-}
-
-interface Props {
-  transactions: Transaction[];
-}
-
-const Insights = ({ transactions }: Props) => {
+const Insights = () => {
+  const { filteredTransactions: transactions } = useFinance();
   const insights = useMemo(() => {
     let categoryMap: Record<string, number> = {};
     let totalExpense = 0;

@@ -1,17 +1,6 @@
 import { useMemo } from "react";
 import { Chart } from "react-google-charts";
-
-interface Transaction {
-  id: number;
-  date: string;
-  amount: number;
-  category: string;
-  type: "income" | "expense";
-}
-
-interface Props {
-  transactions: Transaction[];
-}
+import { useFinance } from "../context/FinanceContext";
 
 const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899", "#14b8a6", "#f97316"];
 
@@ -23,7 +12,8 @@ const options = {
   chartArea: { width: "100%", height: "100%" }, // Maximize chart size
 };
 
-const PieChartComponent = ({ transactions }: Props) => {
+const PieChartComponent = () => {
+  const { filteredTransactions: transactions } = useFinance();
   const { chartData, categoryStats, totalExpenses } = useMemo(() => {
     const expensesMap: Record<string, number> = {};
     let total = 0;

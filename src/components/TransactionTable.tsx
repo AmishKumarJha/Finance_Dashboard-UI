@@ -1,21 +1,9 @@
 import { useState } from "react";
-import type { Role } from "../types";
+import type { Transaction } from "../context/FinanceContext";
+import { useFinance } from "../context/FinanceContext";
 
-interface Transaction {
-  id: number;
-  date: string;
-  amount: number;
-  category: string;
-  type: "income" | "expense";
-}
-
-interface Props {
-  transactions: Transaction[];
-  onEdit: (updated: Transaction) => void;
-  role: Role;
-}
-
-const TransactionTable = ({ transactions, onEdit, role }: Props) => {
+const TransactionTable = () => {
+  const { filteredTransactions: transactions, role, editTransaction: onEdit } = useFinance();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "income" | "expense">("all");
   const [editingId, setEditingId] = useState<number | null>(null);

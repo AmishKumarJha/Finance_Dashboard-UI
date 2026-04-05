@@ -1,18 +1,8 @@
 import { useState, useEffect } from "react";
+import { useFinance } from "../context/FinanceContext";
 
-interface Transaction {
-  id: number;
-  date: string;
-  amount: number;
-  category: string;
-  type: "income" | "expense";
-}
-
-interface Props {
-  transactions: Transaction[];
-}
-
-const AISummary = ({ transactions }: Props) => {
+const AISummary = () => {
+  const { filteredTransactions: transactions } = useFinance();
   const [summary, setSummary] = useState<string>("");
   const [loading, setLoading] = useState(false);
 

@@ -1,4 +1,3 @@
-import { useState, useEffect, useMemo } from "react";
 import SummaryCard from "./components/SummaryCard";
 import LineChartComponent from "./components/LineChartComponent";
 import PieChartComponent from "./components/PieChartComponent";
@@ -7,129 +6,20 @@ import RoleSwitcher from "./components/RoleSwitcher";
 import AddTransaction from "./components/AddTransaction";
 import Insights from "./components/Insights";
 import AISummary from "./components/AISummary";
-import type { Role } from "./types";
-
-interface Transaction {
-  id: number;
-  date: string;
-  amount: number;
-  category: string;
-  type: "income" | "expense";
-}
+import { useFinance } from "./context/FinanceContext";
 
 function App() {
-  const [role, setRole] = useState<Role>("viewer");
-  
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("darkMode") === "true";
-  });
-
-  useEffect(() => {
-    localStorage.setItem("darkMode", darkMode.toString());
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [darkMode]);
-
-  // ✅ Load from localStorage
-  const [transactions, setTransactions] = useState<Transaction[]>(() => {
-    try {
-      const saved = localStorage.getItem("transactions");
-      if (saved && saved !== "undefined") {
-        return JSON.parse(saved);
-      }
-    } catch (error) {
-      console.error("Error parsing transactions from local storage:", error);
-    }
-    return [
-      {
-        id: 1,
-        date: "2026-04-01",
-        amount: 5000,
-        category: "Salary",
-        type: "income",
-      },
-      {
-        id: 2,
-        date: "2026-04-02",
-        amount: 1200,
-        category: "Food",
-        type: "expense",
-      },
-      {
-        id: 3,
-        date: "2026-04-03",
-        amount: 500,
-        category: "Electricity Bill",
-        type: "expense",
-      },
-      {
-        id: 4,
-        date: "2026-04-04",
-        amount: 150,
-        category: "Mobile Recharge",
-        type: "expense",
-      },
-    ];
-  });
-
-  // ✅ Save to localStorage
-  useEffect(() => {
-    localStorage.setItem("transactions", JSON.stringify(transactions));
-  }, [transactions]);
-
-  // ✅ Month Filtering
-  const availableMonths = useMemo(() => {
-    const months = new Set(transactions.map((t) => t.date.substring(0, 7)));
-    
-    // Always include the last 12 months to allow navigating to empty months
-    const today = new Date();
-    for (let i = 0; i < 12; i++) {
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, "0");
-      months.add(`${year}-${month}`);
-      today.setMonth(today.getMonth() - 1);
-    }
-
-    return Array.from(months).sort().reverse();
-  }, [transactions]);
-
-  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    return `${year}-${month}`;
-  });
-
-  const filteredTransactions = useMemo(() => {
-    if (selectedMonth === "all") return transactions;
-    return transactions.filter((t) => t.date.startsWith(selectedMonth));
-  }, [transactions, selectedMonth]);
-
-  // ✅ Calculations
-  const income = filteredTransactions
-    .filter((t) => t.type === "income")
-    .reduce((sum, t) => sum + t.amount, 0);
-
-  const expenses = filteredTransactions
-    .filter((t) => t.type === "expense")
-    .reduce((sum, t) => sum + t.amount, 0);
-
-  const balance = income - expenses;
-
-  // ✅ Add transaction handler
-  const handleAddTransaction = (newTransaction: Transaction) => {
-    setTransactions((prev) => [...prev, newTransaction]);
-  };
-
-  // ✅ Edit transaction handler
-  const handleEditTransaction = (updated: Transaction) => {
-    setTransactions((prev) => 
-      prev.map((t) => (t.id === updated.id ? updated : t))
-    );
-  };
+  const {
+    role,
+    darkMode,
+    setDarkMode,
+    selectedMonth,
+    setSelectedMonth,
+    availableMonths,
+    income,
+    expenses,
+    balance,
+  } = useFinance();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100/80 via-blue-50 to-teal-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 p-6 md:p-10 text-slate-800 dark:text-slate-100 transition-colors duration-500">
@@ -164,7 +54,7 @@ function App() {
             {darkMode ? "☀️" : "🌙"}
           </button>
           <div className="w-px h-6 bg-slate-200 dark:bg-slate-600 mx-1"></div>
-          <RoleSwitcher role={role} setRole={setRole} />
+          <RoleSwitcher />
         </div>
       </div>
 
@@ -177,27 +67,23 @@ function App() {
 
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <LineChartComponent transactions={filteredTransactions} />
-        <PieChartComponent transactions={filteredTransactions} />
+        <LineChartComponent />
+        <PieChartComponent />
       </div>
 
       {/* Insights */}
-      <Insights transactions={filteredTransactions} />
+      <Insights />
 
       {/* AI Summary Simulation */}
-      <AISummary transactions={filteredTransactions} />
+      <AISummary />
 
       {/* Admin only */}
       {role === "admin" && (
-        <AddTransaction onAdd={handleAddTransaction} />
+        <AddTransaction />
       )}
 
       {/* Table */}
-      <TransactionTable 
-        transactions={filteredTransactions} 
-        onEdit={handleEditTransaction}
-        role={role}
-      />
+      <TransactionTable />
     </div>
   );
 }

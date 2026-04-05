@@ -1,11 +1,9 @@
+import { useFinance } from "../context/FinanceContext";
 import type { Role } from "../types";
 
-interface Props {
-  role: Role;
-  setRole: (role: Role) => void;
-}
+const RoleSwitcher = () => {
+  const { role, setRole } = useFinance();
 
-const RoleSwitcher = ({ role, setRole }: Props) => {
   return (
     <div className="flex items-center gap-2">
       <select
